@@ -1,0 +1,129 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="Admin.master.cs" Inherits="admin_Admin" %>
+
+<%@ Import Namespace="System.Data" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Административный раздел</title>
+    <link href="/admin/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="/admin/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
+    <link href="/admin/vendors/easypiechart/jquery.easy-pie-chart.css" rel="stylesheet" media="screen">
+    <link href="/admin/assets/styles.css" rel="stylesheet" media="screen">
+    <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <script language="javascript" type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+    <script language="javascript" type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+    <script src="/admin/assets/scripts.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+            <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+    <script src="vendors/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
+        <div>
+            <div class="navbar navbar-fixed-top">
+                    <telerik:RadNavigation ID="RadNaivation1" runat="server" MenuButtonPosition="Left" Skin="Bootstrap" Width="100%" BorderStyle="None">
+                <Nodes>
+                    <telerik:NavigationNode Text="Рабочий стол" runat="server" NavigateUrl="/admin/default.aspx" ID="NavigationNode2">
+                    </telerik:NavigationNode>
+                  
+                    <telerik:NavigationNode Text="Модерация" runat="server" NavigateUrl="/admin/users/moderator.aspx" ID="Moder">
+                    </telerik:NavigationNode>
+                    <telerik:NavigationNode Text="Пользователи" runat="server" ID="Account">
+                        <Nodes>
+                            <telerik:NavigationNode ID="Search" runat="server" Text="Поиск" NavigateUrl="/admin/users/search.aspx">
+                            </telerik:NavigationNode>
+                            <telerik:NavigationNode ID="Result" runat="server" Text="Результаты" NavigateUrl="/admin/users/result.aspx">
+                            </telerik:NavigationNode>
+                        </Nodes>
+                    </telerik:NavigationNode>
+                    <telerik:NavigationNode Text="Система" runat="server" ID="SystemParam">
+                        <Nodes>
+                            <telerik:NavigationNode ID="LoadTest" runat="server" Text="Загрузка тестов" NavigateUrl="/admin/system/loadtest.aspx">
+                            </telerik:NavigationNode>
+                        </Nodes>
+                    </telerik:NavigationNode>
+
+                    <telerik:NavigationNode ID="UserName" runat="server" Text="<i class='icon-user'></i> Пользователь">
+                        <Nodes>
+                            <telerik:NavigationNode ID="Logut" runat="server" Text="Выход" NavigateUrl="#">
+                            </telerik:NavigationNode>
+                        </Nodes>
+                    </telerik:NavigationNode>
+                      <telerik:NavigationNode ID="NavigationNode1" Text="Products" runat="server" >
+                        <NodeTemplate>
+                            <telerik:RadSearchBox ID="RadSearchBox1" runat="server" Culture="ru-RU" DataSourceID="FamSourse" DataTextField="F" DataValueField="F" EmptyMessage="Поиск по фамилии" OnSearch="RadSearchBox1_Search"></telerik:RadSearchBox>
+                            <asp:SqlDataSource ID="FamSourse" runat="server" ConnectionString="<%$ ConnectionStrings:tmsConnectionString %>" SelectCommand="SELECT DISTINCT [F] FROM [l-kabinet]"></asp:SqlDataSource>
+                        </NodeTemplate>
+                    </telerik:NavigationNode>
+                </Nodes>
+            </telerik:RadNavigation>
+            </div>
+        
+
+
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <!--/span-->
+                    <div class="span12" id="content">
+                        <div class="row-fluid">
+
+
+                            <%--     <div class="alert alert-success">
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                <h4>Success</h4>
+                                The operation completed successfully
+                            </div>--%>
+                            <br />
+                            <div class="navbar">
+                                <div class="navbar-inner">
+                                    <ul class="breadcrumb">
+
+                                        <i class="icon-chevron-right"></i>
+
+
+                                        <li class="active">
+                                            <%Response.Write(Page.Title);%>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server"></asp:ContentPlaceHolder>
+                        <!-- /block -->
+
+
+                    </div>
+                </div>
+                <hr />
+                <footer>
+                    <p>&copy; Система тестирования медицинских работников. 2012-2014</p>
+                </footer>
+            </div>
+        </div>
+        <!--/.fluid-container-->
+        <script src="/admin/js/admin.js"></script>
+        <%--  <script src="vendors/jquery-1.9.1.min.js"></script>--%>
+        <script src="/admin/bootstrap/js/bootstrap.min.js"></script>
+        <script src="/admin/vendors/easypiechart/jquery.easy-pie-chart.js"></script>
+
+        <script>
+            $(function () {
+                // Easy pie charts
+                $('.chart').easyPieChart({ animate: 1000 });
+            });
+        </script>
+
+
+    </form>
+</body>
+</html>

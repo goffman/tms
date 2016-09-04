@@ -1,0 +1,102 @@
+﻿*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+.pos-input {
+  display: none;
+}
+.pos-input:checked + .check-label,
+.pos-input:checked + .check-label::after {
+  opacity: 1;
+}
+.check-label {
+  width: calc('100% - 90px');
+  display: block;
+  padding: 1rem;
+  border-radius: 0.25em;
+  transition: 0.15s ease-in-out background-color;
+  position: relative;
+  color: #fff;
+  opacity: 0.6;
+  transition: 0.15s ease opacity;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+.check-label::before {
+  content: "";
+  width: 1rem;
+  height: 1rem;
+  position: absolute;
+  right: -2rem;
+  border: 1px solid #000;
+  background: #fff;
+}
+.check-label::after {
+  content: "";
+  width: 1rem;
+  height: 1.5rem;
+  position: absolute;
+  right: -2rem;
+  top: 0.5rem;
+  border: 0.5rem solid;
+  border-left: none;
+  border-top: none;
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  transform: rotate(45deg);
+  opacity: 0;
+  transition: 0.15s ease opacity;
+}
+.check-label:hover::after {
+  opacity: 0.6;
+}
+.blue-label {
+  background-color: #3498db;
+  border-color: #3498db;
+}
+.blue-label::after {
+  border-color: inherit;
+}
+.purple-label {
+  background-color: #9b59b6;
+  border-color: #9b59b6;
+}
+.purple-label::after {
+  border-color: inherit;
+}
+.red-label {
+  background-color: #e74c3c;
+  border-color: #e74c3c;
+}
+.red-label::after {
+  border-color: inherit;
+}
+.orange-label {
+  background-color: #e67e22;
+  border-color: #e67e22;
+}
+.orange-label::after {
+  border-color: inherit;
+}
+.yellow-label {
+  background-color: #f1c40f;
+  border-color: #f1c40f;
+}
+.yellow-label::after {
+  border-color: inherit;
+}
+.green-label {
+  background-color: #2ecc71;
+  border-color: #2ecc71;
+}
+.green-label::after {
+  border-color: inherit;
+}
+.left {
+    margin-left:15px;
+    text-align:left;
+}
