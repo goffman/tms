@@ -1,17 +1,10 @@
 ﻿using System;
-using System.Activities.Expressions;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Security.Cryptography;
-using System.ServiceModel.Channels;
 using System.Text;
-using System.Web;
 using System.Web.Configuration;
-using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -50,54 +43,9 @@ public partial class admin_users_search : System.Web.UI.Page
              RadGrid1.DataBind();
             Session["a"] = null;
         }
-        //if (Request.QueryString["a"] != null)
-        //{
-        //    if (SearchTextBox.Text == string.Empty)
-        //    {
-        //        SqlDataSource2.SelectParameters["FIO"].DefaultValue = Request.QueryString["a"] + "%";
-        //        RadGrid1.DataBind();
-        //    }
-        //    else
-        //    {
-        //        PropertyInfo isreadonly = typeof(System.Collections.Specialized.NameValueCollection).GetProperty("IsReadOnly", BindingFlags.Instance | BindingFlags.NonPublic);
-        //         make collection editable
-        //        isreadonly.SetValue(this.Request.QueryString, false, null);
-        //         remove
-        //        this.Request.QueryString.Remove("a");
-            
-        //    }
-
-        //}
-
-    }
-    protected void Button1_Click(object sender, EventArgs e)
-    {
-      
-        //SqlDataSource2.SelectParameters["FIO"].DefaultValue = RadAutoCompleteBox1.Text.Remove(RadAutoCompleteBox1.Text.Length - 2) + "%";
-        //RadGrid1.DataBind();
-    }
-    protected void RadAutoCompleteBox1_TextChanged(object sender, Telerik.Web.UI.AutoCompleteTextEventArgs e)
-    {
-//        SELECT        [l-kabinet].*
-//FROM            [l-kabinet]
-//WHERE        (F LIKE N'вол%')
-       
-       
-    }
-    protected void RadAutoCompleteBox1_EntryAdded(object sender, Telerik.Web.UI.AutoCompleteEntryEventArgs e)
-    {
-        //Button1.Text = RadAutoCompleteBox1.Text + RadAutoCompleteBox1.Text.Remove(RadAutoCompleteBox1.Text.Length - 2);
-        //SqlDataSource2.SelectParameters["FIO"].DefaultValue = RadAutoCompleteBox1.Text.Remove(RadAutoCompleteBox1.Text.Length - 2) + "%";
-        //RadGrid1.DataBind();
-    }
+     }
 
    
-    protected void btnSearch_Click(object sender, EventArgs e)
-    {
-        SqlDataSource2.SelectParameters["FIO"].DefaultValue = SearchTextBox.Text + "%";
-        RadGrid1.DataBind();
-        //RadAutoCompleteBox1.Entries.Clear();
-    }
     protected void RadGrid1_SelectedIndexChanged(object sender, EventArgs e)
     {
     
@@ -163,10 +111,12 @@ public partial class admin_users_search : System.Web.UI.Page
         client.Send(mm);//поехало
     }
 
-    protected void AlertNotif(string title, string text)
+    private void AlertNotif(string title, string text)
     {
+
+  //      Response.Write("Info('sdasd')");
         alert.Visible = true;
-        AlertText.Text += text+"<br/>";
+        AlertText.Text += text + "<br/>";
         AlertTitle.Text = title;
 
     }

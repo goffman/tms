@@ -6,10 +6,13 @@
 <asp:Content ID="Content1" runat="server" ContentPlaceHolderID="ContentPlaceHolder1">
     
     <script>
-  $('#RemoveResultTest').modal({
+        
+        $('#RemoveResultTest').modal({
    
-      backdrop:true
+            backdrop:true
         })
+
+
     </script>
  <%--   Модальные окна--%>
 
@@ -105,7 +108,7 @@
         <asp:Label ID="AlertText" runat="server" Text=""></asp:Label>
     </div>
 
-    <script type="text/javascript" language="javascript">
+    <script type="text/javascript">
         function OnConfirm() {
             if (confirm('Удалить запись?')) return true;
             return false;
@@ -159,30 +162,12 @@
     <asp:Panel ID="Panel1" runat="server">
         <div class="row-fluid">
 
-
-            <div class="block">
-                <div class="navbar navbar-inner block-header">
-                    <div class="muted pull-left">Фамилия человека</div>
-                </div>
-                <div class="block-content collapse in">
-                    <div class="form-inline" style="z-index: -999;">
-                        <asp:TextBox ID="SearchTextBox" CssClass="span12" runat="server" OnTextChanged="SearchTextBox_TextChanged" AutoPostBack="True"></asp:TextBox>
-                    </div>
-                </div>
-            </div>
-
-
-
-            <!-- block -->
-
-            <!-- /block -->
-
-
             <div class="block">
                 <div class="navbar navbar-inner block-header">
                     <div class="muted pull-left">Результат</div>
                 </div>
                 <div class="block-content collapse in">
+                      <asp:TextBox ID="SearchTextBox" CssClass="span12" runat="server" OnTextChanged="SearchTextBox_TextChanged" AutoPostBack="True" placeholder="Фамилия человека"></asp:TextBox>
                     <telerik:RadGrid ID="RadGrid1" runat="server" Culture="ru-RU" DataSourceID="SqlDataSource2" AllowSorting="True" AllowPaging="True" AllowMultiRowEdit="True" OnSelectedIndexChanged="RadGrid1_SelectedIndexChanged" CellSpacing="-1" Skin="MetroTouch">
                         <PagerStyle Mode="NextPrevAndNumeric"></PagerStyle>
                         <MasterTableView AutoGenerateColumns="False" DataSourceID="SqlDataSource2"  GroupLoadMode="Client" NoMasterRecordsText="Нет записей" DataKeyNames="ID" HierarchyLoadMode="Client">

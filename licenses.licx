@@ -1,3 +1,13 @@
+Telerik.Web.UI.RadClientDataSource, Telerik.Web.UI, Version=2016.2.504.45, Culture=neutral, PublicKeyToken=121fae78165ba3d4
+Telerik.Web.UI.RadAjaxLoadingPanel, Telerik.Web.UI, Version=2016.2.504.45, Culture=neutral, PublicKeyToken=121fae78165ba3d4
+Telerik.Web.UI.RadWindowManager, Telerik.Web.UI, Version=2016.2.504.45, Culture=neutral, PublicKeyToken=121fae78165ba3d4
+Telerik.Web.UI.RadGrid, Telerik.Web.UI, Version=2016.2.504.45, Culture=neutral, PublicKeyToken=121fae78165ba3d4
+Telerik.Web.UI.RadAjaxManager, Telerik.Web.UI, Version=2016.2.504.45, Culture=neutral, PublicKeyToken=121fae78165ba3d4
+Telerik.Web.UI.RadCaptcha, Telerik.Web.UI, Version=2016.2.504.45, Culture=neutral, PublicKeyToken=121fae78165ba3d4
+Telerik.Web.UI.RadNotification, Telerik.Web.UI, Version=2016.2.504.45, Culture=neutral, PublicKeyToken=121fae78165ba3d4
+Telerik.Web.UI.RadWindow, Telerik.Web.UI, Version=2016.2.504.45, Culture=neutral, PublicKeyToken=121fae78165ba3d4
+Telerik.Web.UI.RadAjaxPanel, Telerik.Web.UI, Version=2016.2.504.45, Culture=neutral, PublicKeyToken=121fae78165ba3d4
+Telerik.Web.UI.RadCodeBlock, Telerik.Web.UI, Version=2016.2.504.45, Culture=neutral, PublicKeyToken=121fae78165ba3d4
 Telerik.Web.UI.RadWindow, Telerik.Web.UI, Version=2015.1.401.45, Culture=neutral, PublicKeyToken=121fae78165ba3d4
 Telerik.Web.UI.RadCaptcha, Telerik.Web.UI, Version=2015.1.401.45, Culture=neutral, PublicKeyToken=121fae78165ba3d4
 Telerik.Web.UI.RadSearchBox, Telerik.Web.UI, Version=2015.1.401.45, Culture=neutral, PublicKeyToken=121fae78165ba3d4

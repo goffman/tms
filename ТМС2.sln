@@ -1,27 +1,27 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "ТМС2", ".", "{3DAD9ACB-2E30-460D-A5C6-334D349D6063}"
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5.1"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_57823"
-		Debug.AspNetCompiler.PhysicalPath = "..\ТМС2\"
+		Debug.AspNetCompiler.PhysicalPath = "..\tms\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_57823\"
 		Debug.AspNetCompiler.Updateable = "true"
 		Debug.AspNetCompiler.ForceOverwrite = "true"
 		Debug.AspNetCompiler.FixedNames = "false"
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.VirtualPath = "/localhost_57823"
-		Release.AspNetCompiler.PhysicalPath = "..\ТМС2\"
+		Release.AspNetCompiler.PhysicalPath = "..\tms\"
 		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_57823\"
 		Release.AspNetCompiler.Updateable = "true"
 		Release.AspNetCompiler.ForceOverwrite = "true"
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
 		VWDPort = "57823"
-		SlnRelativePath = "..\ТМС2\"
+		SlnRelativePath = "..\tms\"
 	EndProjectSection
 EndProject
 Global

@@ -97,7 +97,7 @@
                  
                 <div class="control-group">
                     <div class="controls">
-                        <button type="button" class="btn btn-default" data-dismiss="modal" onclick="returnToParent('Отмена','Действие отменино'); return false;">Закрыть</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal" onclick="returnToParent('Отмена','Действие отменено'); return false;">Закрыть</button>
                     <asp:Button ID="ChangeSpecialtyButton" runat="server" Text="Изменить" CssClass="btn btn-primary" OnClick="ChangeSpecialtyButton_Click" />
                     </div>
                 </div>

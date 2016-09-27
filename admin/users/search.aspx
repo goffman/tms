@@ -25,6 +25,10 @@
                 masterTable.rebind();
             }
 
+            function Info(msg) {
+                document.getElementById('alert').innerHTML = msg;
+            }
+
             function ShowNotification(titile, mes) {
                 var notification = $find("<%= RadNotification2.ClientID %>");
 
@@ -50,6 +54,13 @@
 
                     wnd.setUrl("modal/EditAccount.aspx?id=" + IDAccountSelected.value);
                     wnd.set_title("Изменить информацию личного кабинета");
+                    wnd.show();
+                } else if (index === "zero") {
+                     var wnd = $find("<%=RadWindow1.ClientID %>");
+                    var IDAccountSelected = document.getElementById("<%= IDAccount.ClientID %>");
+
+                    wnd.setUrl("modal/zero_result.aspx?id=" + IDAccountSelected.value);
+                    wnd.set_title("Обнуления результата тестирования");
                     wnd.show();
                 }
               
@@ -159,6 +170,8 @@
             if (confirm('Удалить запись?')) return true;
             return false;
         }
+
+       
     </script>
 
     <telerik:RadCodeBlock ID="RadCodeBlock1" runat="server">
@@ -399,7 +412,7 @@ WHERE        ([l-kabinet].F LIKE @FIO)">
                     <asp:LinkButton ID="result" runat="server" OnClick="result_Click" OnClientClick="return confirm('Вы точно хотите пересчитать результаты?');"><i class="icon-refresh"></i> Пересчитать результаты</asp:LinkButton>
                 </li>
                 <li>
-                    <asp:LinkButton ID="dellresult" runat="server" PostBackUrl="#RemoveResultTest" data-toggle="modal" data-target="#RemoveResultTest"><i class="icon-remove-circle" ></i> Обнулить результаты</asp:LinkButton>
+                    <asp:LinkButton ID="dellresult" runat="server" OnClientClick="openWin('zero'); return false;"><i class="icon-remove-circle" ></i> Обнулить результаты</asp:LinkButton>
                 </li>
                 <li class="dropdown">
 

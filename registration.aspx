@@ -4,6 +4,29 @@
 <%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
 
 <asp:Content ID="Content1" runat="server" ContentPlaceHolderID="BodyContent">
+<script src="wizard.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $("#example-basic").steps({
+            headerTag: "h3",
+            bodyTag: "section",
+            transitionEffect: "slideLeft",
+            autoFocus: true
+        });
+    </script>
+    <div id="example-basic">
+    <h3>Keyboard</h3>
+    <section>
+        <p>Try the keyboard navigation by clicking arrow left or right!</p>
+    </section>
+    <h3>Effects</h3>
+    <section>
+        <p>Wonderful transition effects.</p>
+    </section>
+    <h3>Pager</h3>
+    <section>
+        <p>The next and previous buttons help you to navigate through your content.</p>
+    </section>
+</div>
     <telerik:RadStyleSheetManager ID="RadStyleSheetManager1" runat="server">
     </telerik:RadStyleSheetManager>
     <telerik:RadAjaxManager ID="RadAjaxManager1" runat="server">
@@ -15,6 +38,9 @@
             </telerik:AjaxSetting>
         </AjaxSettings>
     </telerik:RadAjaxManager>
+
+    
+
     <telerik:RadAjaxPanel ID="RadAjaxPanel1" runat="server" HorizontalAlign="NotSet" LoadingPanelID="RadAjaxLoadingPanel1">
         <asp:Wizard ID="Wizard1" runat="server" ActiveStepIndex="1" DisplaySideBar="False" EnableTheming="True">
             <FinishNavigationTemplate>
