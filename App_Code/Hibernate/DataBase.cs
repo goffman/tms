@@ -33,11 +33,10 @@ Mappings(m => m.FluentMappings.AddFromAssemblyOf<Lkabinet>())
             {
                 OpenConnection();
                 if (sessionFactory != null) return sessionFactory.OpenSession();
-                else return null;
             }
             else
             {
-                sessionFactory.OpenSession();
+              return  sessionFactory.OpenSession();
             }
             return null;
         }

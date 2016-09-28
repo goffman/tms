@@ -9,13 +9,11 @@
         <script>
 
             function OnClientClose(oWnd, args) {
-                //get the transferred arguments
                 var arg = args.get_argument();
                 if (arg) {
                     var tl = arg.title;
                     var ms = arg.ms;
                     ShowNotification(tl, ms);
-
                     RefreshGrid();
                 }
             }
@@ -100,7 +98,7 @@
     <%--   Модальные окна--%>
 
     <%--  Обнуление результатов тестирования--%>
-    <div class="modal fade" id="RemoveResultTest" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="z-index: -99999999">
+   <%-- <div class="modal fade" id="RemoveResultTest" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="z-index: -99999999">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -125,7 +123,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>--%>
 
 
 
@@ -194,11 +192,7 @@
                 Ot.value = args.getDataKeyValue("O");
             }
 
-            function TagRomove() {
-                var ReasonRemoved = document.getElementById("<%= ReasonsRemovalTests.ClientID %>");
-                ReasonRemoved.value = "Согласно письму МЗ № от ";
-
-            }
+           
 
 
 
@@ -370,13 +364,13 @@ WHERE        ([l-kabinet].F LIKE @FIO)">
 
     </asp:Panel>
 
-    <asp:Panel ID="Panel3" runat="server" Visible="False">
+<%--    <asp:Panel ID="Panel3" runat="server" Visible="False">
 
         <asp:Button ID="OK" runat="server" Text="Сбросить" OnClick="OK_Click" />
 
         <asp:Button ID="Cancel" runat="server" OnClick="Cancel_Click" Text="Отмена" />
 
-    </asp:Panel>
+    </asp:Panel>--%>
     <telerik:RadWindowManager ID="RadWindowManager1" runat="server" EnableShadow="true">
     </telerik:RadWindowManager>
     <asp:HiddenField runat="server" ID="UserName" OnValueChanged="Unnamed1_ValueChanged"></asp:HiddenField>

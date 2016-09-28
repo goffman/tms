@@ -9,39 +9,53 @@
     <link href="/admin/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
     <title></title>
     <script language="javascript">
-         function TagRomove() {
-                var ReasonRemoved = document.getElementById("<%= ReasonsRemovalTests.ClientID %>");
-                ReasonRemoved.value = "Согласно письму МЗ № от ";
+        function TagRomove() {
+            var ReasonRemoved = document.getElementById("<%= ReasonsRemovalTests.ClientID %>");
+            ReasonRemoved.value = "Согласно письму МЗ № от ";
+            check();
+
+        }
+
+         function GetRadWindow() {
+             var oWindow = null;
+             if (window.radWindow) oWindow = window.radWindow;
+             else if (window.frameElement.radWindow) oWindow = window.frameElement.radWindow;
+             return oWindow;
+         }
+
+
+         function returnToParent(t, m) {
+             //create the argument that will be returned to the parent page
+             var oArg = new Object();
+
+             //get a reference to the current RadWindow
+             var oWnd = GetRadWindow();
+
+             oArg.title = t;
+             oArg.ms = m;
+
+
+             //Close the RadWindow and send the argument to the parent page
+             if (oArg.title && oArg.ms) {
+                 oWnd.close(oArg);
+             }
+             else {
+                 alert("Please fill both fields");
+             }
+         }
+
+         function check() {
+             var reasonRemoved = document.getElementById("<%= ReasonsRemovalTests.ClientID %>");
+             var btn = document.getElementById('<%= SaveRemoveResult.ClientID %>');
+             console.log(reasonRemoved.value);
+             if (reasonRemoved.value.length > 1) {
+                 btn.disabled = false;
+                 console.log('true');
+             } else
+                 btn.disabled = true;
 
          }
 
-        function GetRadWindow() {
-            var oWindow = null;
-            if (window.radWindow) oWindow = window.radWindow;
-            else if (window.frameElement.radWindow) oWindow = window.frameElement.radWindow;
-            return oWindow;
-        }
-
-
-        function returnToParent(t, m) {
-            //create the argument that will be returned to the parent page
-            var oArg = new Object();
-
-            //get a reference to the current RadWindow
-            var oWnd = GetRadWindow();
-
-            oArg.title = t;
-            oArg.ms = m;
-
-
-            //Close the RadWindow and send the argument to the parent page
-            if (oArg.title && oArg.ms) {
-                oWnd.close(oArg);
-            }
-            else {
-                alert("Please fill both fields");
-            }
-        }
     </script>
 </head>
 <body>
@@ -51,11 +65,11 @@
             <h4 class="modal-title" id="myModalLabel">Обнуление результатов тестирования</h4>
             Причина аннулирование теста
                     
-                    <asp:TextBox ID="ReasonsRemovalTests" runat="server" Width="97%" Rows="3"></asp:TextBox>
-             <a href="javascript:void(0)" onclick="TagRomove()">Приказ МЗ</a>
-            <hr/>
-             <button type="button" class="btn btn-default" data-dismiss="modal" onclick="returnToParent('Отмена','Действие отменино'); return false;">Закрыть</button>
-                    <asp:Button ID="SaveRemoveResult" runat="server" OnClick="OK_Click" Text="Обнулить" CssClass="btn btn-primary" />
+                    <asp:TextBox ID="ReasonsRemovalTests" runat="server" Width="97%" Rows="3"  onkeyup="check();"></asp:TextBox>
+            <a href="javascript:void(0)" onclick="TagRomove()">Приказ МЗ</a>
+            <hr />
+            <button type="button" class="btn btn-default " data-dismiss="modal" onclick="returnToParent('Отмена','Действие отменино'); return false;">Закрыть</button>
+            <asp:Button ID="SaveRemoveResult" Enabled="False" runat="server" OnClick="OK_Click" Text="Обнулить" CssClass="btn btn-primary" />
         </div>
     </form>
 </body>

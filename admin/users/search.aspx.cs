@@ -1,12 +1,18 @@
 ﻿using System;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Diagnostics;
+using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web.Configuration;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Hibernate;
+using Hibernate.Domain;
+using NHibernate.Linq;
+using Telerik.Web.Data.Extensions;
 
 public partial class admin_users_search : System.Web.UI.Page
 {
@@ -240,18 +246,21 @@ public partial class admin_users_search : System.Web.UI.Page
        
         
         }
-
-    protected void Notification(string title, string text)
-    {
-        RadNotification1.Title = title;
-        RadNotification1.Text = text;
-        RadNotification1.Show();
-    }
     protected void result_Click(object sender, EventArgs e)
     {
+
+        var session = DataBase.GetSession();
+        if (session!=null)
+        {
+            var s = session.QueryOver<Testirovanie>().Where(testirovanie => testirovanie.IdTest == 7239).List();
+            foreach (var item in s)
+            {
+                Debug.WriteLine(item.IdVopros);
+            }
+        }
         AlertNotifClear();
         int tmp = 0;
-        string ReCountOtvet = " SELECT        COUNT(*) AS Expr1 FROM            testirovanie INNER JOIN otveti ON testirovanie.ID_otvet = otveti.id GROUP BY testirovanie.ID_testiruemyj, otveti.vernyj HAVING        (testirovanie.ID_testiruemyj = @IDKabinet) AND (otveti.vernyj = 1)"; // делаем запрос с введеным в тектовое поле логином
+        string ReCountOtvet = "SELECT        COUNT(*) AS Expr1 FROM            testirovanie INNER JOIN otveti ON testirovanie.ID_otvet = otveti.id GROUP BY testirovanie.ID_testiruemyj, otveti.vernyj HAVING        (testirovanie.ID_testiruemyj = @IDKabinet) AND (otveti.vernyj = 1)"; // делаем запрос с введеным в тектовое поле логином
         SqlCommand RCO = new SqlCommand(ReCountOtvet, con);
         RCO.Parameters.AddWithValue("@IDKabinet", IDAccount.Value);
             try
@@ -294,14 +303,7 @@ public partial class admin_users_search : System.Web.UI.Page
 
 
     }
-    protected void dellresult_Click(object sender, EventArgs e)
-    {
-        Panel3.Visible = true;
-
-
-
-
-    }
+   
     protected void Button1_Click1(object sender, EventArgs e)
     {
     
@@ -310,101 +312,98 @@ public partial class admin_users_search : System.Web.UI.Page
     {
 
     }
-    protected void OK_Click(object sender, EventArgs e)
-    {
-        if (IDAccount.Value != "")
-        {
-            if (RadCaptcha1.IsValid)
-            {
-                if (ReasonsRemovalTests.Text.Length > 10)
-                {
-                    string InsertCancellationResults =
-                        "INSERT INTO CancellationResults (AccountID, date, IDAdmin, Reason) VALUES        (@UserID, GETDATE(), 1,@Reason)";
-                    // делаем запрос с введеным в тектовое поле логином
-                    SqlCommand ICR = new SqlCommand(InsertCancellationResults, con);
-                    ICR.Parameters.AddWithValue("@UserID", IDAccount.Value);
-                    ICR.Parameters.AddWithValue("@Reason", ReasonsRemovalTests.Text);
-                    try
-                    {
-                        con.Open();
-                        ICR.ExecuteNonQuery();
-                        con.Close();
-                    }
-                    catch (Exception ex)
-                    {
+    //protected void OK_Click(object sender, EventArgs e)
+    //{
+    //    if (IDAccount.Value != "")
+    //    {
+    //        if (RadCaptcha1.IsValid)
+    //        {
+    //            if (ReasonsRemovalTests.Text.Length > 10)
+    //            {
+    //                string InsertCancellationResults =
+    //                    "INSERT INTO CancellationResults (AccountID, date, IDAdmin, Reason) VALUES        (@UserID, GETDATE(), 1,@Reason)";
+    //                // делаем запрос с введеным в тектовое поле логином
+    //                SqlCommand ICR = new SqlCommand(InsertCancellationResults, con);
+    //                ICR.Parameters.AddWithValue("@UserID", IDAccount.Value);
+    //                ICR.Parameters.AddWithValue("@Reason", ReasonsRemovalTests.Text);
+    //                try
+    //                {
+    //                    con.Open();
+    //                    ICR.ExecuteNonQuery();
+    //                    con.Close();
+    //                }
+    //                catch (Exception ex)
+    //                {
 
-                        con.Close();
-                        AlertNotif("Ошибка", ex.Message);
-                    }
-
-
-
-                    int tmp1 = 0;
-                    int tmp2 = 0;
-                    string DeleteProhozhdenieTesta =
-                        "DELETE FROM prohozhdenie_testa WHERE        (ID_testiruemyj = @IDKabinet) ";
-                    // делаем запрос с введеным в тектовое поле логином
-                    SqlCommand DPT = new SqlCommand(DeleteProhozhdenieTesta, con);
-                    DPT.Parameters.AddWithValue("@IDKabinet", IDAccount.Value);
-                    try
-                    {
-                        con.Open();
-                        DPT.ExecuteScalar();
-                        con.Close();
-                        tmp1 = 1;
-                    }
-                    catch (Exception ex)
-                    {
-                        con.Close();
-                        AlertNotif("Ошибка", ex.Message);
-
-                    }
-
-                    string DeleteTestirovanie = "DELETE FROM testirovanie WHERE        (ID_testiruemyj = @IDKabinet)";
-                    // делаем запрос с введеным в тектовое поле логином
-                    SqlCommand DT = new SqlCommand(DeleteTestirovanie, con);
-                    DT.Parameters.AddWithValue("@IDKabinet", IDAccount.Value);
-                    try
-                    {
-                        con.Open();
-                        DT.ExecuteScalar();
-                        con.Close();
-                        tmp2 = 1;
-                    }
-                    catch (Exception ex)
-                    {
-                        con.Close();
-                        AlertNotif("Ошибка", ex.Message);
-
-                    }
-
-                    if (tmp1 == 1 & tmp2 == 1)
-                    {
-
-                        AlertNotif("Успех", "Тесты для пользователя с ID " + IDAccount.Value + " аннулированы");
-                        RadGrid1.DataBind();
-                        ReasonsRemovalTests.Text = string.Empty;
-                    }
-                }
+    //                    con.Close();
+    //                    AlertNotif("Ошибка", ex.Message);
+    //                }
 
 
-            }
-            else
-            {
-                AlertNotif("Ошибка", "Текст с картинки введен неверно");
 
-            }
-        }
-        else
-        {
-            AlertNotif("Ошибка", "Не выбран пользователь");
-        }
+    //                int tmp1 = 0;
+    //                int tmp2 = 0;
+    //                string DeleteProhozhdenieTesta =
+    //                    "DELETE FROM prohozhdenie_testa WHERE        (ID_testiruemyj = @IDKabinet) ";
+    //                // делаем запрос с введеным в тектовое поле логином
+    //                SqlCommand DPT = new SqlCommand(DeleteProhozhdenieTesta, con);
+    //                DPT.Parameters.AddWithValue("@IDKabinet", IDAccount.Value);
+    //                try
+    //                {
+    //                    con.Open();
+    //                    DPT.ExecuteScalar();
+    //                    con.Close();
+    //                    tmp1 = 1;
+    //                }
+    //                catch (Exception ex)
+    //                {
+    //                    con.Close();
+    //                    AlertNotif("Ошибка", ex.Message);
 
-    }
-    protected void Cancel_Click(object sender, EventArgs e)
-    {
-        Panel3.Visible = false;
-    }
+    //                }
+
+    //                string DeleteTestirovanie = "DELETE FROM testirovanie WHERE        (ID_testiruemyj = @IDKabinet)";
+    //                // делаем запрос с введеным в тектовое поле логином
+    //                SqlCommand DT = new SqlCommand(DeleteTestirovanie, con);
+    //                DT.Parameters.AddWithValue("@IDKabinet", IDAccount.Value);
+    //                try
+    //                {
+    //                    con.Open();
+    //                    DT.ExecuteScalar();
+    //                    con.Close();
+    //                    tmp2 = 1;
+    //                }
+    //                catch (Exception ex)
+    //                {
+    //                    con.Close();
+    //                    AlertNotif("Ошибка", ex.Message);
+
+    //                }
+
+    //                if (tmp1 == 1 & tmp2 == 1)
+    //                {
+
+    //                    AlertNotif("Успех", "Тесты для пользователя с ID " + IDAccount.Value + " аннулированы");
+    //                    RadGrid1.DataBind();
+    //                    ReasonsRemovalTests.Text = string.Empty;
+    //                }
+    //            }
+
+
+    //        }
+    //        else
+    //        {
+    //            AlertNotif("Ошибка", "Текст с картинки введен неверно");
+
+    //        }
+    //    }
+    //    else
+    //    {
+    //        AlertNotif("Ошибка", "Не выбран пользователь");
+    //    }
+
+    //}
+  
     protected void BtnSearch_Click(object sender, ImageClickEventArgs e)
     {
         SqlDataSource2.SelectParameters["FIO"].DefaultValue = SearchTextBox.Text + "%";
