@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Diagnostics;
@@ -9,6 +10,7 @@ using System.Text;
 using System.Web.Configuration;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using FluentNHibernate.Testing.Values;
 using Hibernate;
 using Hibernate.Domain;
 using NHibernate.Linq;
@@ -19,26 +21,26 @@ public partial class admin_users_search : System.Web.UI.Page
     public static String LoginVar;
     public static String PassVar;
     public static string LStatus;
-     SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["tmsConnectionString"].ConnectionString); //производим соединение с БД
+    SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["tmsConnectionString"].ConnectionString); //производим соединение с БД
 
 
-     //protected void Page_Init(object sender, EventArgs e)
-     //{
-     //    if (Request.QueryString["a"] != null)
-     //    {
-     //        Response.Cookies["a"].Value = Request.QueryString["a"];
-     //        Response.Cookies["a"].Expires = DateTime.Now.AddDays(1);
+    //protected void Page_Init(object sender, EventArgs e)
+    //{
+    //    if (Request.QueryString["a"] != null)
+    //    {
+    //        Response.Cookies["a"].Value = Request.QueryString["a"];
+    //        Response.Cookies["a"].Expires = DateTime.Now.AddDays(1);
 
-     //        //ViewState["a"] = ;
-     //        //// Редирект без QueryString
-     //        Response.Redirect("/admin/users/search.aspx", true);
-     //    }
-     //}
+    //        //ViewState["a"] = ;
+    //        //// Редирект без QueryString
+    //        Response.Redirect("/admin/users/search.aspx", true);
+    //    }
+    //}
 
-     //public string GetUriWithoutQueryStr(Uri url)
-     //{
-     //    return url.GetLeftPart(UriPartial.Path);
-     //}
+    //public string GetUriWithoutQueryStr(Uri url)
+    //{
+    //    return url.GetLeftPart(UriPartial.Path);
+    //}
 
 
     protected void Page_Load(object sender, EventArgs e)
@@ -46,15 +48,15 @@ public partial class admin_users_search : System.Web.UI.Page
         if (Session["a"] != null)
         {
             SqlDataSource2.SelectParameters["FIO"].DefaultValue = Session["a"].ToString() + "%";
-             RadGrid1.DataBind();
+            RadGrid1.DataBind();
             Session["a"] = null;
         }
-     }
+    }
 
-   
+
     protected void RadGrid1_SelectedIndexChanged(object sender, EventArgs e)
     {
-    
+
     }
 
     string GetHashString(string s)
@@ -120,7 +122,7 @@ public partial class admin_users_search : System.Web.UI.Page
     private void AlertNotif(string title, string text)
     {
 
-  //      Response.Write("Info('sdasd')");
+        //      Response.Write("Info('sdasd')");
         alert.Visible = true;
         AlertText.Text += text + "<br/>";
         AlertTitle.Text = title;
@@ -130,7 +132,7 @@ public partial class admin_users_search : System.Web.UI.Page
     protected void AlertNotifClear()
     {
         alert.Visible = false;
-        AlertText.Text=null;
+        AlertText.Text = null;
         AlertTitle.Text = null;
 
     }
@@ -167,7 +169,7 @@ public partial class admin_users_search : System.Web.UI.Page
     }
     protected void parol_Click(object sender, EventArgs e)
     {
-        string Operation = "Изминения пароля"; 
+        string Operation = "Изминения пароля";
         //Процедура изминения пароля пользователя
         Random rand = new Random();
 
@@ -190,7 +192,7 @@ public partial class admin_users_search : System.Web.UI.Page
                 con.Open();
                 UA.ExecuteNonQuery();
                 con.Close();
-                AlertNotif(Operation, "Код активации: Обновлен на новый "+Convert.ToString(tmpActivation));
+                AlertNotif(Operation, "Код активации: Обновлен на новый " + Convert.ToString(tmpActivation));
                 ActivationText = " Код активации: " + tmpActivation;
             }
             catch (Exception ex)
@@ -216,13 +218,13 @@ public partial class admin_users_search : System.Web.UI.Page
             PassVar = "224433160a49d26d440d394c4d657fe1";
             try
             {
-                MSender(telefon.Value.Replace(" ", string.Empty), "Логин: " + UserName.Value + " Пароль: " + tmp+ActivationText);
+                MSender(telefon.Value.Replace(" ", string.Empty), "Логин: " + UserName.Value + " Пароль: " + tmp + ActivationText);
                 AlertNotif(Operation, "Статус отправки смс: Сообщение успешно отправлено");
             }
             catch (Exception ex)
             {
 
-                AlertNotif(Operation,"Статус отправки смс: "+ex.Message);
+                AlertNotif(Operation, "Статус отправки смс: " + ex.Message);
             }
 
             try
@@ -241,72 +243,117 @@ public partial class admin_users_search : System.Web.UI.Page
         catch (Exception ex)
         {
             con.Close();
-            AlertNotif("Ошибка",ex.Message);
+            AlertNotif("Ошибка", ex.Message);
         }
-       
-        
-        }
-    protected void result_Click(object sender, EventArgs e)
+
+
+    }
+
+
+    private void ConversionResults(int idLkabiner)
     {
 
         var session = DataBase.GetSession();
-        if (session!=null)
+        if (session != null)
         {
-            var s = session.QueryOver<Testirovanie>().Where(testirovanie => testirovanie.IdTest == 7239).List();
+            var tmpResult = 0;
+            Dictionary<Voprosy, List<int>> tmp = new Dictionary<Voprosy, List<int>>();
+            var s = session.Query<Testirovanie>().Where(testirovanie => testirovanie.Lkabinet == Lkabinet.GetById(idLkabiner)).ToList();
             foreach (var item in s)
             {
-                Debug.WriteLine(item.IdVopros);
+                if (tmp.ContainsKey(item.IdVopros))
+                {
+                    if (item.IdOtvet != null) tmp[item.IdVopros].AddRange(new[] { (int)item.IdOtvet });
+                }
+                else { if (item.IdOtvet != null) tmp.Add(item.IdVopros, new List<int>() { (int)item.IdOtvet }); }
             }
+           
+            foreach (var item in tmp)
+            {
+             
+                var otvety =
+                    session.Query<Otveti>()
+                        .Where(otveti => otveti.IdVoprosy == item.Key.IdVoprosy && otveti.Vernyj == 1)
+                        .ToList();
+                var countPrOtvet = otvety.Count;
+                var countOtvet = item.Value.Select(t => otvety.FirstOrDefault(otveti => otveti.Id == t)).Count(w => w != null);
+
+                if (countPrOtvet==countOtvet)++tmpResult;
+              
+            }
+
+            ProhozhdenieTesta.UpdateResultProhozhdenieTesta(idLkabiner, tmpResult);
+            RadGrid1.DataBind();
+            AlertNotifClear();
+            AlertNotif("Успех", "Результаты пересчета: " + Convert.ToString(tmpResult) + " правильных ответа");
         }
-        AlertNotifClear();
-        int tmp = 0;
-        string ReCountOtvet = "SELECT        COUNT(*) AS Expr1 FROM            testirovanie INNER JOIN otveti ON testirovanie.ID_otvet = otveti.id GROUP BY testirovanie.ID_testiruemyj, otveti.vernyj HAVING        (testirovanie.ID_testiruemyj = @IDKabinet) AND (otveti.vernyj = 1)"; // делаем запрос с введеным в тектовое поле логином
-        SqlCommand RCO = new SqlCommand(ReCountOtvet, con);
-        RCO.Parameters.AddWithValue("@IDKabinet", IDAccount.Value);
-            try
-            {
-                con.Open();
-                tmp=Convert.ToInt32(RCO.ExecuteScalar().ToString());
-                con.Close();
 
-                AlertNotif("Успех", "Результаты пересчета: "+Convert.ToString(tmp)+" правильных ответа");
-                if (tmp >= 70)
-                {
-                    tmp = 70;
-                }
-                string UpdateOtvet = "UPDATE       prohozhdenie_testa SET                rezultat = @result WHERE        (ID_testiruemyj = @IDKabinet)"; // делаем запрос с введеным в тектовое поле логином
-                SqlCommand UO = new SqlCommand(UpdateOtvet, con);
-                UO.Parameters.AddWithValue("@result", tmp);
-                UO.Parameters.AddWithValue("@IDKabinet", IDAccount.Value);
-                try
-                {
-                    con.Open();
-                    UO.ExecuteNonQuery();
-                    con.Close();
-                    RadGrid1.DataBind();
-                }
-                catch (Exception ex)
-                {
+    }
+    protected void result_Click(object sender, EventArgs e)
+    {
+        ConversionResults(Convert.ToInt32(IDAccount.Value));
+        //var session = DataBase.GetSession();
+        //if (session != null)
+        //{
 
-                    con.Close();
-                    AlertNotif("Ошибка", ex.Message);
-                }
-                
-            }
-            catch (Exception ex)
-            {
-                con.Close();
-                AlertNotif("Ошибка", ex.Message);
+        //    var l = session.QueryOver<Lpu>().List();
+        //    var l2 = session.QueryOver<Lpu>();
+        //    var s4 = session.QueryOver<Lkabinet>().List();
+        //    //  View(s);
+        //    //foreach (var item in s)
+        //    //{
+        //    //    Debug.WriteLine(item.IdVopros);
+        //    //}
+        //}
+        //AlertNotifClear();
+        //int tmp = 0;
+        //string ReCountOtvet = "SELECT        COUNT(*) AS Expr1 FROM            testirovanie INNER JOIN otveti ON testirovanie.ID_otvet = otveti.id GROUP BY testirovanie.ID_testiruemyj, otveti.vernyj HAVING        (testirovanie.ID_testiruemyj = @IDKabinet) AND (otveti.vernyj = 1)"; // делаем запрос с введеным в тектовое поле логином
+        //SqlCommand RCO = new SqlCommand(ReCountOtvet, con);
+        //RCO.Parameters.AddWithValue("@IDKabinet", IDAccount.Value);
+        //try
+        //{
+        //    con.Open();
+        //    tmp = Convert.ToInt32(RCO.ExecuteScalar().ToString());
+        //    con.Close();
 
-            }
+        //    AlertNotif("Успех", "Результаты пересчета: " + Convert.ToString(tmp) + " правильных ответа");
+        //    if (tmp >= 70)
+        //    {
+        //        tmp = 70;
+        //    }
+        //    string UpdateOtvet = "UPDATE       prohozhdenie_testa SET                rezultat = @result WHERE        (ID_testiruemyj = @IDKabinet)"; // делаем запрос с введеным в тектовое поле логином
+        //    SqlCommand UO = new SqlCommand(UpdateOtvet, con);
+        //    UO.Parameters.AddWithValue("@result", tmp);
+        //    UO.Parameters.AddWithValue("@IDKabinet", IDAccount.Value);
+        //    try
+        //    {
+        //        con.Open();
+        //        UO.ExecuteNonQuery();
+        //        con.Close();
+        //        RadGrid1.DataBind();
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //        con.Close();
+        //        AlertNotif("Ошибка", ex.Message);
+        //    }
+
+        //}
+        //catch (Exception ex)
+        //{
+        //    con.Close();
+        //    AlertNotif("Ошибка", ex.Message);
+
+        //}
 
 
 
     }
-   
+
     protected void Button1_Click1(object sender, EventArgs e)
     {
-    
+
     }
     protected void Unnamed1_ValueChanged(object sender, EventArgs e)
     {
@@ -403,7 +450,7 @@ public partial class admin_users_search : System.Web.UI.Page
     //    }
 
     //}
-  
+
     protected void BtnSearch_Click(object sender, ImageClickEventArgs e)
     {
         SqlDataSource2.SelectParameters["FIO"].DefaultValue = SearchTextBox.Text + "%";
@@ -412,10 +459,10 @@ public partial class admin_users_search : System.Web.UI.Page
     protected void SearchTextBox_TextChanged(object sender, EventArgs e)
     {
 
-            //SqlDataSource2.SelectParameters["FIO"].DefaultValue = Request.QueryString["a"] + "%";
-            //RadGrid1.DataBind();
+        //SqlDataSource2.SelectParameters["FIO"].DefaultValue = Request.QueryString["a"] + "%";
+        //RadGrid1.DataBind();
 
-        
+
         SqlDataSource2.SelectParameters["FIO"].DefaultValue = SearchTextBox.Text.Trim() + "%";
         RadGrid1.DataBind();
     }
@@ -436,12 +483,12 @@ public partial class admin_users_search : System.Web.UI.Page
         }
         catch (Exception)
         {
-            
-           con.Close();
-           return tmp;
+
+            con.Close();
+            return tmp;
         }
 
-       
+
     }
     //Блокировка пользователя
     protected void BlackListButton_Click(object sender, EventArgs e)
@@ -452,7 +499,7 @@ public partial class admin_users_search : System.Web.UI.Page
         {
             text = DropDownListBlockReasons.SelectedValue;
         }
-        else if(BlockPrichina.Text.Length>10)
+        else if (BlockPrichina.Text.Length > 10)
         {
             text = BlockPrichina.Text;
         }
@@ -488,18 +535,18 @@ public partial class admin_users_search : System.Web.UI.Page
             }
             else
             {
-                AlertNotif("Внимание","Пользователь "+IDAccount.Value+" уже заблокирован");
+                AlertNotif("Внимание", "Пользователь " + IDAccount.Value + " уже заблокирован");
             }
 
 
         }
         else
         {
-            AlertNotif("Ошибка","Не указана причина блокировки пользователя");
-           
+            AlertNotif("Ошибка", "Не указана причина блокировки пользователя");
+
         }
         BlockPrichina.Text = string.Empty;
-    //    BlockPrichina.DataBind();
+        //    BlockPrichina.DataBind();
         DropDownListBlockReasons.Items.Clear();
         DropDownListBlockReasons.Items.Add(new ListItem("", ""));
 
@@ -508,9 +555,9 @@ public partial class admin_users_search : System.Web.UI.Page
     }
     protected void LinkButton2_Click(object sender, EventArgs e)
     {
-        string RemoveLock ="  DELETE FROM BlockedUsers WHERE        (IDUsers = @UserID) UPDATE       [l-kabinet] SET                on_delete = NULL WHERE        (ID = @UserID)";
+        string RemoveLock = "  DELETE FROM BlockedUsers WHERE        (IDUsers = @UserID) UPDATE       [l-kabinet] SET                on_delete = NULL WHERE        (ID = @UserID)";
         SqlCommand RL = new SqlCommand(RemoveLock, con);
-                RL.Parameters.AddWithValue("@UserID", IDAccount.Value);
+        RL.Parameters.AddWithValue("@UserID", IDAccount.Value);
         try
         {
             con.Open();
@@ -521,11 +568,11 @@ public partial class admin_users_search : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            
-           con.Close();
+
+            con.Close();
             AlertNotif("Ошибка", ex.Message);
         }
-  
+
     }
 
     //protected void ChangeSpecialtyButton_Click(object sender, EventArgs e)
@@ -543,7 +590,7 @@ public partial class admin_users_search : System.Web.UI.Page
     //            con.Open();
     //            DPT.ExecuteScalar();
     //            con.Close();
-               
+
     //        }
     //        catch (Exception ex)
     //        {
@@ -561,7 +608,7 @@ public partial class admin_users_search : System.Web.UI.Page
     //            con.Open();
     //            DT.ExecuteScalar();
     //            con.Close();
-                
+
     //        }
     //        catch (Exception ex)
     //        {
@@ -580,7 +627,7 @@ public partial class admin_users_search : System.Web.UI.Page
     //            con.Open();
     //            UD.ExecuteScalar();
     //            con.Close();
-                
+
     //        }
     //        catch (Exception ex)
     //        {
@@ -591,7 +638,7 @@ public partial class admin_users_search : System.Web.UI.Page
 
     //        AlertNotif("Успех","Специальность обновлена");
     //        RadGrid1.DataBind();
-           
+
     //    }
     //}
 }
